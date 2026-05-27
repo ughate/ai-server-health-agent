@@ -1,0 +1,42 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets & Keys
+*.pem
+*.key
+.env
+.env.local
+*.secret
+
+# SSH Keys
+agent_key*
+
+# Ansible
+*.retry
+/tmp/facts/
+
+# Logs
+*.log
+
+

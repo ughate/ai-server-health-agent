@@ -1,0 +1,44 @@
+
+---
+- name: Server Health Remediation
+  hosts: webfarm
+  become: yes
+  vars:
+    action: "remediate"
+    package: null
+
+  tasks:
+    - name: Gather service facts
+      service_facts:
+
+    - name: Restart critical services (remediation)
+      systemd:
+        name: "{{ item }}"
+        state: restarted
+      loop:
+        - nginx
+        - httpd
+        - docker
+      when: action == 'remediate'
+      ignore_errors: yes
+
+    - name: Apply security patches (Red Hat/Amazon Linux)
+      yum:
+        name: "*"
+        state: latest
+        security: yes
+      when: action == 'patch' and ansible_os_family == 'RedHat'
+
+    - name: Apply security patches (Debian/Ubuntu)
+      apt:
+        upgrade: safe
+        update_cache: yes
+      when: action == 'patch' and ansible_os_family == 'Debian'
+
+    - name: Install specified package
+      package:
+        name: "{{ package }}"
+        state: present
+      when: action == 'install' and package is defined and package != None
+
+
